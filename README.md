@@ -13,7 +13,7 @@ This mod was made with `BepInEx` which is why you need to install it first.
 - Download the version `5.4.22` of [BepInEx](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22).
 - Unzip it in the `Shardpunk` folder.
 
-### Installing BiggerTeam
+### Installing RandomParty
 
 - Download the latest release of [RandomParty](https://github.com/remyCases/Shardpunk-RandomParty/releases). 
 - Unzip it, you should have 2 files: `Random.dll` and `base.txt`.
@@ -40,7 +40,7 @@ Other mods I've made:
 - Shardpunk:
     - [Shardpunk-Faster](https://github.com/remyCases/Shardpunk-Faster)
     - [Shardpunk-MoreSkillLevels](https://github.com/remyCases/Shardpunk-MoreSkillLevels)
-    - [Shardpunk-Faster](https://github.com/remyCases/Shardpunk-Faster)
+    - [Shardpunk-BiggerTeam](https://github.com/remyCases/Shardpunk-BiggerTeam)
 
 - Stoneshard:
     - [Character Creation](https://github.com/remyCases/CharacterCreator)
