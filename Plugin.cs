@@ -92,18 +92,20 @@ public class RandomDisplayBehavior : GameEventBehaviourBase
         // all available elements
         Game instance = Game.Instance;
         PartySelectionUIState partySelectionState = instance.MainMenuUIState.PartySelectionState;
-        PartySelectionCharacterItem[] chars = AvailableCharactersProvider.Instance.GetAvailableCharacters();
-        PartySelectionCharacterItem[] bots = AvailableCharactersProvider.Instance.GetAvailableBotCharacters();
+        PartySelectionCharacterItem[] allChars = AvailableCharactersProvider.Instance.GetAvailableCharacters();
+        PartySelectionCharacterItem[] allBots = AvailableCharactersProvider.Instance.GetAvailableBotCharacters();
 
+        IList<PartySelectionCharacterItem> availableChars = allChars.Where(x => instance.ActiveProfile.Unlocks.IsCharacterTypeUnlocked(x.Character.Type)).ToList();
+        IList<PartySelectionCharacterItem> availableBots = allBots.Where(x => instance.ActiveProfile.Unlocks.IsCharacterTypeUnlocked(x.Character.Type)).ToList();
         // clear party
         partySelectionState.Party.ClearAll();
 
         // add randoms to party
-        partySelectionState.PartyBotSlot = RandomUtils.SelectionSamplingTechnique(bots, 1).First().Character;
-        foreach(Character c in RandomUtils.SelectionSamplingTechnique(chars, partySelectionState.MaxCharactersInParty).Select(x => x.Character))
+        foreach(Character c in RandomUtils.SelectionSamplingTechnique(availableChars, partySelectionState.MaxCharactersInParty).Select(x => x.Character))
         {
             PartySelection.AddOrRemoveCharacterToParty(c);
         }
+        partySelectionState.PartyBotSlot = RandomUtils.SelectionSamplingTechnique(availableBots, 1).First().Character;
         this.UpdateDisplay();
     }
 
