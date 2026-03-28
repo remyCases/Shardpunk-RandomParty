@@ -5,14 +5,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts;
-using Assets.Scripts.GameUI;
-using Assets.Scripts.GameUI.MainMenu;
-using Assets.Scripts.Localisation;
-using Assets.Scripts.Logic.Tactical;
+using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 using HarmonyLib.Tools;
+using Shared;
+using Shp.CharacterSystem;
+using Shp.Core;
+using Shp.Localisation;
+using Shp.PartySelectionSystem;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,7 +28,36 @@ public class Plugin : BaseUnityPlugin
         HarmonyFileLog.Enabled = true;
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         Harmony harmony = new(PluginInfo.PLUGIN_GUID);
+        CheckMethod(typeof(PartyCreationModalDisplayBehaviour), "Awake");
         harmony.PatchAll();
+    }
+    private void CheckMethod(Type TargetType, string methodName, Type[] parameters = null)
+    {
+        MethodInfo method = AccessTools.Method(TargetType, methodName, parameters);
+        if (method == null)
+        {
+            Logger.LogError($"{TargetType}.{methodName} method not found! Game version changed?");
+            return;
+        }
+        Logger.LogInfo($"{TargetType}.{methodName} method found");
+    }
+    private void CheckMethod(Type TargetType, MethodType methodType, Type[] parameters = null)
+    {
+        switch (methodType)
+        {
+            case MethodType.Constructor:
+                ConstructorInfo constructor = AccessTools.Constructor(TargetType, parameters);
+                if (constructor == null)
+                {
+                    Logger.LogError($"{TargetType}.{methodType} method not found! Game version changed?");
+                    return;
+                }
+                break;
+            default:
+                Logger.LogError($"Unknown methodType {TargetType}.{methodType}");
+                return;
+        }
+        Logger.LogInfo($"{TargetType}.{methodType} method found");
     }
 }
 
